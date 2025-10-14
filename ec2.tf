@@ -22,12 +22,14 @@ resource "aws_security_group" "allow-all-ports" {
 }
 
 resource "aws_instance" "terraform" {
-  ami                    = "ami-09c813fb71547fc4f"
-  instance_type          = "t3.micro"
+  ami                    = var.ami
+  instance_type          = var.env == "prod" ? "t3.large" : "t3.micro"
   vpc_security_group_ids = [aws_security_group.allow-all-ports.id]
+  count = length(var.instance_name)
 
   tags = {
-    Name       = "terraform"
+    Name       = var.instance_name[count.index]
     Terraform  = "True"
   }
 }
+
