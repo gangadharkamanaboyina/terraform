@@ -22,7 +22,7 @@ resource "aws_security_group" "allow-all-ports" {
 }
 
 resource "aws_instance" "terraform" {
-  ami                    = var.ami
+  ami                    = data.aws_ami.DevopsPrac.id
   instance_type          = var.env == "prod" ? "t3.large" : "t3.micro"
   vpc_security_group_ids = [aws_security_group.allow-all-ports.id]
   count = length(var.instance_name)
